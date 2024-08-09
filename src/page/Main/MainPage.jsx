@@ -1,26 +1,28 @@
-import { useEffect } from 'react';
-
 import { css } from '@emotion/css';
-import Common from "@style/common"
 
+import HeaderDummy from "@components/HeaderDummy";
 import { RankComponent } from './RankComponent';
+import { NewsComponent } from './NewsComponent';
+import { TodayVocabComponent } from './TodayVocabComponent';
+import { VisitDaysComponent } from './VisitDaysComponent';
 
-const titleStyle = css`
+const mainPageStyle = css`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 
+  gap: 1em;
   width: 100vw;
-
-  font-size: 48px;
-  font-weight: 700;
 `;
 
 export const MainPage = () => {
   return (
-    <div>
-      {/*<h1 className={titleStyle}>main</h1>*/}
+    <div className={mainPageStyle}>
+      <HeaderDummy />
       <RankComponent />
+      <TodayVocabComponent />
+      <VisitDaysComponent />
+      <NewsComponent />
     </div>
   );
 };

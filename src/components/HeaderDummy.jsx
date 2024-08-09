@@ -4,13 +4,8 @@ import { FiAlignJustify, FiBell } from "react-icons/fi";
 import Common from "@style/common"
 import { css } from '@emotion/css';
 
-
-
 const headerStyle = css`
-  position: fixed;
-  top: 0;
-  left: 0;
-
+  opacity: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,7 +29,7 @@ const headerStyle = css`
   }
 `
 
-const Header = () => {
+const HeaderDummy = () => {
   return (
     <div className={headerStyle}>
       <h1>Kanbu</h1>
@@ -44,4 +39,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderDummy;
