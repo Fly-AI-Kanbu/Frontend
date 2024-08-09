@@ -11,7 +11,7 @@ const mainPageStyle = css`
   flex-direction: column;
   align-items: center;
 
-  gap: 1em;
+  gap: 1.5em;
   width: 100vw;
 `;
 
