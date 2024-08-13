@@ -2,9 +2,10 @@ const Common = {
   colors: {
     primary: '#0F4C82',
     primaryDark: '#004664',
-    primaryLight: '#c7eeff',
-    secondary: '#8eddff',
+    primaryLight: '#1dc9dc',
+    secondary: '#582c7f',
     text: '#ffffff',
+    gray: '#e0e0e0',
   }
 }
 

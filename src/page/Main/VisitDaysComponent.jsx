@@ -1,20 +1,123 @@
-import { useEffect } from 'react';
-
 import { css } from '@emotion/css';
-import Common from "@style/common"
+import { useEffect, useState } from 'react';
+import { FiBold, FiCheck } from "react-icons/fi";
 
-const visitDaysComponent = css`
+import Common from '../../style/common';
+
+const visitDaysStyle = css`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 80%;
+  gap: .2em;
+
+  .title {
+    font-size: 1em;
+  }
+  .days {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    padding: .3em 1em;
+    border-radius: 1em;
+
+    background-color: ${Common.colors.text};
+    color: ${Common.colors.primary};
+  }
+`;
+
+const dayStyle = css`
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  width: 100vw;
+  font-weight: 900;
+
+  padding: .5em;
+  border-radius: .5em;
+  font-size: .8em;
+  width: 12%;
+
+  .check-in-box {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+
+    background-color: ${Common.colors.gray};
+  }
+  .check-in-true {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    background-color: ${Common.colors.primary};
+    color: ${Common.colors.text};
+  }
 `;
 
-export const VisitDaysComponent = () => {
+//const checkInData = [
+//  { day: 'Mon', checkedIn: true },
+//  { day: 'Tue', checkedIn: true },
+//  { day: 'Wed', checkedIn: true },
+//  { day: 'Thu', checkedIn: false },
+//  { day: 'Fri', checkedIn: false },
+//  { day: 'Sat', checkedIn: false },
+//  { day: 'Sun', checkedIn: false },
+//];
+
+const checkInData = [
+  { day: '일', checkedIn: true },
+  { day: '월', checkedIn: true },
+  { day: '화', checkedIn: true },
+  { day: '수', checkedIn: false },
+  { day: '목', checkedIn: false },
+  { day: '금', checkedIn: false },
+  { day: '토', checkedIn: false },
+];
+
+const CheckInStatus = ({ day, checkedIn }) => {
   return (
-    <div className={visitDaysComponent}>
-      visitDaysComponent
+    <div className={dayStyle} style={
+      day === new Date().toLocaleDateString(undefined, { weekday: 'short' }) ? { backgroundColor: Common.colors.primaryLight } : {}
+    }>
+      <span>{day}</span>
+      {checkedIn ?
+      <div className='check-in-box check-in-true'>
+        <FiCheck size={10} strokeWidth={4}/>
+      </div> :
+      <div className='check-in-box check-in-false'></div>}
+    </div>
+  );
+};
+
+export const VisitDaysComponent = () => {
+  const [visitDays, setVisitDays] = useState(1);
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    // Calculate the number of visit days based on checkInData
+    const numVisitDays = checkInData.filter((data) => data.checkedIn).length;
+    setVisitDays(numVisitDays);
+
+    // Get the current date
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    setCurrentDate(today.toLocaleDateString(undefined, options));
+  }, []);
+
+  return (
+    <div className={visitDaysStyle}>
+      <h3 className='title'>Current {visitDays} days study streak</h3>
+      <div className='days'>
+      {checkInData.map((data) => (
+        <CheckInStatus key={data.day} day={data.day} checkedIn={data.checkedIn} />
+      ))}
+      </div>
     </div>
   );
 };
