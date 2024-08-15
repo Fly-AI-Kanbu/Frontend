@@ -10,7 +10,11 @@ const visitDaysStyle = css`
   justify-content: center;
   align-items: flex-start;
 
-  width: 80%;
+  background-color: rgba(${Common.colors.background});
+  color: rgba(${Common.colors.text});
+
+  padding: 1em;
+  width: 100%;
   gap: .2em;
 
   .title {
@@ -23,9 +27,21 @@ const visitDaysStyle = css`
     width: 100%;
     padding: .3em 1em;
     border-radius: 1em;
+  }
 
-    background-color: ${Common.colors.text};
-    color: ${Common.colors.primary};
+  .visit-days {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+
+    font-size: .8em;
+    font-weight: 500;
+    color: rgba(${Common.colors.text});
+
+    span {
+      font-weight: 800;
+      color: rgba(${Common.colors.primary800})
+    }
   }
 `;
 
@@ -48,15 +64,15 @@ const dayStyle = css`
     height: 20px;
     border-radius: 50%;
 
-    background-color: ${Common.colors.gray};
+    background-color: rgba(${Common.colors.primary800}, 0.2);
   }
   .check-in-true {
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    background-color: ${Common.colors.primary};
-    color: ${Common.colors.text};
+    background-color: rgba(${Common.colors.primary300});
+    color: rgba(${Common.colors.text});
   }
 `;
 
@@ -83,7 +99,7 @@ const checkInData = [
 const CheckInStatus = ({ day, checkedIn }) => {
   return (
     <div className={dayStyle} style={
-      day === new Date().toLocaleDateString(undefined, { weekday: 'short' }) ? { backgroundColor: Common.colors.primaryLight } : {}
+      day === new Date().toLocaleDateString(undefined, { weekday: 'short' }) ? { backgroundColor: `rgba(${Common.colors.primary200})` } : {}
     }>
       <span>{day}</span>
       {checkedIn ?
@@ -112,12 +128,13 @@ export const VisitDaysComponent = () => {
 
   return (
     <div className={visitDaysStyle}>
-      <h3 className='title'>Current {visitDays} days study streak</h3>
+      <h3 className='title'>주간 출석 현황</h3>
       <div className='days'>
       {checkInData.map((data) => (
         <CheckInStatus key={data.day} day={data.day} checkedIn={data.checkedIn} />
       ))}
       </div>
+      <h4 className='visit-days'>현재 <span>{visitDays}일</span> 연속 출석하셨습니다.</h4>
     </div>
   );
 };

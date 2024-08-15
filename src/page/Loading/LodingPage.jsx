@@ -11,7 +11,7 @@ const loadingStyle = css`
   width: 100vw;
   height: 100vh;
 
-  background: linear-gradient(130deg, rgba(${Common.colors.primary100}) 0%, rgba(${Common.colors.primary200}) 100%);
+  background: linear-gradient(130deg, rgba(${Common.colors.primary200}) 0%, rgba(${Common.colors.primary600}) 100%);
 
 
   .title {
@@ -20,7 +20,7 @@ const loadingStyle = css`
     font-size: 4em;
     font-weight: 700;
 
-    color: rgba(${Common.colors.primary700});
+    color: rgba(${Common.colors.primary800});
   }
 
   .loader {

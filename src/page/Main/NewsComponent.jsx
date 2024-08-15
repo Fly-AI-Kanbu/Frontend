@@ -9,8 +9,12 @@ const newsStyle = css`
   justify-content: center;
   align-items: flex-start;
 
-  width: 80%;
-  gap: .5em;
+  background-color: rgba(${Common.colors.gray300});
+  color: rgba(${Common.colors.text});
+
+  padding: 1em;
+  width: 100%;
+  gap: .8em;
 
   .title {
     font-size: 1em;
@@ -23,10 +27,10 @@ const newsItemStyle = css`
   justify-content: flex-start;
 
   width: 100%;
-  padding: .7em 1em;
-  border-radius: 1em;
-  background-color: ${Common.colors.text};
-  color: ${Common.colors.primary};
+  padding: .5em .7em;
+  border-radius: .5em;
+  background-color: rgba(${Common.colors.background});
+  box-shadow: 4px 4px 12px rgba(${Common.colors.gray800}, 0.3);
   gap: .1em;
 
   .news-title {

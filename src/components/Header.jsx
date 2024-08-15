@@ -4,8 +4,6 @@ import { FiAlignJustify, FiBell } from "react-icons/fi";
 import Common from "@style/common"
 import { css } from '@emotion/css';
 
-
-
 const headerStyle = css`
   position: fixed;
   top: 0;
@@ -22,7 +20,7 @@ const headerStyle = css`
 
   padding: 1em;
   gap: .5em;
-  /*color: ${Common.colors.primary};*/
+  color: rgba(${Common.colors.text});
 
   h1 {
     font-size: 1.2em;

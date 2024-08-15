@@ -10,11 +10,15 @@ const todayVocabStyle = css`
   justify-content: center;
   align-items: flex-start;
 
-  width: 80%;
+  padding: 1em;
+  width: 100%;
   gap: .2em;
+  color: rgba(${Common.colors.text});
+  background-color: rgba(${Common.colors.primary300});
 
   .title {
     font-size: 1em;
+    font-weight: 800;
   }
   .vocab-slide {
     display: flex;
@@ -24,8 +28,6 @@ const todayVocabStyle = css`
 
     width: 100%;
     padding: 1em;
-    background-color: ${Common.colors.text};
-    color: ${Common.colors.primary};
     border-radius: 1em;
 
     .vocab {
@@ -80,7 +82,7 @@ export const TodayVocabComponent = () => {
 
   return (
     <div className={todayVocabStyle}>
-      <h3 className='title'>Today's Vocabulary</h3>
+      <h3 className='title'>오늘의 단어</h3>
       {/* Vocab Slide list */}
       <div className='vocab-slide'>
         <FiChevronLeft className='button' onClick={handlePreviousWord}/>
