@@ -1,5 +1,6 @@
 import { css } from '@emotion/css';
 
+import HeaderDummy from "@components/HeaderDummy";
 import { RankComponent } from './RankComponent';
 import { NewsComponent } from './NewsComponent';
 import { TodayVocabComponent } from './TodayVocabComponent';
@@ -9,7 +10,6 @@ const mainPageStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 3em;
 
   gap: 1.5em;
   width: 100vw;
@@ -18,6 +18,7 @@ const mainPageStyle = css`
 export const MainPage = () => {
   return (
     <div className={mainPageStyle}>
+      <HeaderDummy />
       <RankComponent />
       <TodayVocabComponent />
       <VisitDaysComponent />
