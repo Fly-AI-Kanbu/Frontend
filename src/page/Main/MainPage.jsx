@@ -6,6 +6,7 @@ import { RankComponent } from './RankComponent';
 import { NewsComponent } from './NewsComponent';
 import { TodayVocabComponent } from './TodayVocabComponent';
 import { VisitDaysComponent } from './VisitDaysComponent';
+import NavBarDummy from '../../components/NavBarDummy';
 
 const mainPageStyle = css`
   display: flex;
@@ -24,6 +25,7 @@ export const MainPage = () => {
       <TodayVocabComponent />
       <VisitDaysComponent />
       <NewsComponent />
+      <NavBarDummy />
     </div>
   );
 };

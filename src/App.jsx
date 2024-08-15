@@ -5,6 +5,7 @@ import { LoadingPage } from "./page/Loading/LodingPage";
 import Header from "./components/Header";
 import { MainPage } from "./page/Main/MainPage";
 import Common from "@style/common"
+import NavBar from "./components/NavBar";
 
 const rootStyle = css`
   position: relative;
@@ -19,6 +20,7 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<MainPage />} />
         </Routes>
+        <NavBar />
       </BrowserRouter>
     </div>
   );
