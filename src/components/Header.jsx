@@ -8,20 +8,22 @@ import { css } from '@emotion/css';
 const headerStyle = css`
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  /*width: 100vw;*/
-  width: 100%;
-  /*font-size: 1.2em;*/
+  width: 100vw;
+  max-width: ${Common.maxWidth};
   font-weight: 700;
 
   padding: .7em 1em;
   gap: .5em;
   color: rgba(${Common.colors.text});
+  background-color: rgba(${Common.colors.background});
+  border-bottom: 1px solid rgba(${Common.colors.border});
 
   .logo {
     display: flex;

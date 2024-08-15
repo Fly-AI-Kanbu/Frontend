@@ -29,13 +29,12 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  background: $background;
 }
 
-.background-cover {
-  z-index: -1;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  background: $background;
+::-webkit-scrollbar{
+  display: none;
 }

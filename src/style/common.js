@@ -56,7 +56,9 @@ const Common = {
     green700: '67, 160, 71',
     green800: '56, 142, 60',
     green900: '46, 125, 50'
-  }
+  },
+
+  maxWidth: '430px',
 }
 
 export default Common;

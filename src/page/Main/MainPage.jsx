@@ -12,7 +12,7 @@ const mainPageStyle = css`
   flex-direction: column;
   align-items: center;
 
-  width: 100vw;
+  width: 100%;
 `;
 
 export const MainPage = () => {

@@ -8,6 +8,7 @@ const loadingStyle = css`
   justify-content: center;
   align-items: center;
 
+  max-width: ${Common.maxWidth};
   width: 100vw;
   height: 100vh;
 
