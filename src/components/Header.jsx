@@ -18,7 +18,7 @@ const headerStyle = css`
   /*font-size: 1.2em;*/
   font-weight: 700;
 
-  padding: 1em;
+  padding: .7em 1em;
   gap: .5em;
   color: rgba(${Common.colors.text});
 
