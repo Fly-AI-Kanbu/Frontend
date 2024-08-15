@@ -11,6 +11,8 @@ const loadingStyle = css`
   width: 100vw;
   height: 100vh;
 
+  background: linear-gradient(130deg, rgba(${Common.colors.primary100}) 0%, rgba(${Common.colors.primary200}) 100%);
+
 
   .title {
     z-index: 100;
@@ -18,7 +20,7 @@ const loadingStyle = css`
     font-size: 4em;
     font-weight: 700;
 
-    color: ${Common.colors.text};
+    color: rgba(${Common.colors.primary700});
   }
 
   .loader {
@@ -29,7 +31,7 @@ const loadingStyle = css`
   .loader,
   .loader:before,
   .loader:after {
-    --c:no-repeat linear-gradient(#046D8B 0 0);
+    --c:no-repeat linear-gradient(rgba(${Common.colors.primary300}) 0 0);
     background:var(--c), var(--c), var(--c), var(--c);
     animation: l19-1 1.5s infinite, l19-2 1.5s infinite;
   }
