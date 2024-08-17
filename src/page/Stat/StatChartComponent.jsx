@@ -29,9 +29,14 @@ const statChartComponentStyle = css`
   align-items: center;
   gap: .5em;
 
-  width: 100%;
+  width: 90%;
   padding: 1em;
-  border-bottom: 1px solid rgba(${Common.colors.border});
+  /*border-bottom: 1px solid rgba(${Common.colors.border});*/
+  background-color: rgba(${Common.colors.gray300}, 0.8);
+  box-shadow: 4px 4px 12px rgba(${Common.colors.gray800}, 0.3);
+
+  margin: 2em;
+  border-radius: 2em;
 
   .stat-classifier {
     display: flex;
