@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { css } from '@emotion/css';
 
-import { LoadingPage } from "./page/Loading/LodingPage";
+import { ProfilePage } from "./page/Profile/ProfilePage";
 import Header from "./components/Header";
 import { MainPage } from "./page/Main/MainPage";
 import Common from "@style/common"
@@ -19,6 +19,7 @@ export const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path='/profile' element={<ProfilePage />} />
         </Routes>
         <NavBar />
       </BrowserRouter>

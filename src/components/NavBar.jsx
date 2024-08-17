@@ -1,5 +1,6 @@
 import React from 'react';
-import { FiAlignJustify, FiBell, FiList, FiMessageSquare, FiBarChart2, FiHome, FiUser, FiCheckSquare } from "react-icons/fi";
+import { useNavigate } from 'react-router-dom';
+import { FiMessageSquare, FiBarChart2, FiHome, FiUser, FiCheckSquare } from "react-icons/fi";
 
 import Common from "@style/common"
 import { css } from '@emotion/css';
@@ -30,7 +31,7 @@ const navBarItemStyle = css`
   align-items: center;
   flex-grow: 1;
   padding: .3em;
-  /*background-color: rgba(${Common.colors.primary100});*/
+  cursor: pointer;
 
   border-right: 1px solid rgba(${Common.colors.border});
   &:last-child {
@@ -49,29 +50,35 @@ const navBarItemStyle = css`
 const NavBarItemList = [
   {
     icon: FiMessageSquare,
-    children: '대화'
+    children: 'chat',
+    to: '/chat',
   },
   {
     icon: FiBarChart2,
-    children: ''
+    children: 'stat',
+    to: '/stat',
   },
   {
     icon: FiHome,
-    children: 'Menu'
+    children: 'Home',
+    to: '/',
   },
   {
     icon: FiCheckSquare,
-    children: 'Menu'
+    children: 'exam',
+    to: '/exam',
   },
   {
     icon: FiUser,
-    children: 'Menu'
+    children: 'profile',
+    to: '/profile',
   },
 ];
 
-const NavBarItem = ({ children, icon }) => {
+const NavBarItem = ({ children, icon, to }) => {
+  const navigate = useNavigate();
   return (
-    <div className={navBarItemStyle}>
+    <div className={navBarItemStyle} onClick={() => navigate(to)}>
       {icon()}
       {/*<div className='name'>{children}</div>*/}
     </div>
