@@ -22,6 +22,7 @@ const navBarStyle = css`
   padding: .7em 1em;
   color: rgba(${Common.colors.text});
   background-color: rgba(${Common.colors.background});
+  border-top: 1px solid rgba(${Common.colors.border});
 `
 
 const navBarItemStyle = css`
