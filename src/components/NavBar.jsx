@@ -66,8 +66,8 @@ const NavBarItemList = [
   },
   {
     icon: FiCheckSquare,
-    children: 'exam',
-    to: '/exam',
+    children: 'quiz',
+    to: '/quiz',
   },
   {
     icon: FiUser,

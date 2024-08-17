@@ -2,8 +2,8 @@ import { css } from '@emotion/css';
 
 import HeaderDummy from "@components/HeaderDummy";
 import { StatChartComponent } from './StatChartComponent';
-import NavBarDummy from '../../components/NavBarDummy';
 import { StatDescriptionComponent } from './StatDescriptionComponent';
+import NavBarDummy from '@components/NavBarDummy';
 
 const statPageStyle = css`
   display: flex;

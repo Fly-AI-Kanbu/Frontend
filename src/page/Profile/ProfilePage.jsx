@@ -3,7 +3,7 @@ import { css } from '@emotion/css';
 import HeaderDummy from "@components/HeaderDummy";
 import { UserInfoComponent } from './UserInfoComponent';
 import { MenuListComponent } from './MenuListComponent';
-import NavBarDummy from '../../components/NavBarDummy';
+import NavBarDummy from '@components/NavBarDummy';
 
 const profilePageStyle = css`
   display: flex;
