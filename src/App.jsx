@@ -7,6 +7,7 @@ import NavBar from "./components/NavBar";
 import { MainPage } from "./page/Main/MainPage";
 import { ProfilePage } from "./page/Profile/ProfilePage";
 import { StatPage } from "./page/Stat/StatPage";
+import { QuizPage } from "./page/Quiz/QuizPage";
 
 const rootStyle = css`
   position: relative;
@@ -22,6 +23,7 @@ export const App = () => {
           <Route path="/" element={<MainPage />} />
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/stat' element={<StatPage />} />
+          <Route path='/quiz' element={<QuizPage />} />
         </Routes>
         <NavBar />
       </BrowserRouter>
