@@ -1,6 +1,11 @@
 import { css } from '@emotion/css';
 
-const mainPageStyle = css`
+import HeaderDummy from "@components/HeaderDummy";
+import { UserInfoComponent } from './UserInfoComponent';
+import { MenuListComponent } from './MenuListComponent';
+import NavBarDummy from '../../components/NavBarDummy';
+
+const profilePageStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,8 +15,11 @@ const mainPageStyle = css`
 
 export const ProfilePage = () => {
   return (
-    <div className={mainPageStyle}>
-      Profile Page
+    <div className={profilePageStyle}>
+      <HeaderDummy />
+      <UserInfoComponent />
+      <MenuListComponent />
+      <NavBarDummy />
     </div>
   );
 };
