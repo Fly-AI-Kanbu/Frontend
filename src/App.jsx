@@ -12,6 +12,7 @@ import { QuizPage } from "./page/Quiz/QuizPage";
 const rootStyle = css`
   position: relative;
   max-width: ${Common.maxWidth};
+  width: 100vw;
 `
 
 export const App = () => {
