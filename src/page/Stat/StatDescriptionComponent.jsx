@@ -67,10 +67,6 @@ export const StatDescriptionComponent = () => {
       description: '단어와 문장을 비교하고 구분하는 능력'
     },
     {
-      type: '발음',
-      description: '발음이 명확하고 자연스러운 능력'
-    },
-    {
       type: '유창성',
       description: '말하는 속도와 유창함'
     },

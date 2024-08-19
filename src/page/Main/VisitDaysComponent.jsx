@@ -90,7 +90,7 @@ const checkInData = [
   { day: '일', checkedIn: true },
   { day: '월', checkedIn: true },
   { day: '화', checkedIn: true },
-  { day: '수', checkedIn: false },
+  { day: '수', checkedIn: true },
   { day: '목', checkedIn: false },
   { day: '금', checkedIn: false },
   { day: '토', checkedIn: false },
