@@ -9,6 +9,7 @@ import { ProfilePage } from "./page/Profile/ProfilePage";
 import { StatPage } from "./page/Stat/StatPage";
 import { QuizPage } from "./page/Quiz/QuizPage";
 import { ChatListPage } from "./page/Chat/ChatListPage";
+import { ChatPage } from "./page/Chat/ChatPage";
 
 const rootStyle = css`
   position: relative;
@@ -28,6 +29,7 @@ export const App = () => {
           <Route path='/stat' element={<StatPage />} />
           <Route path='/quiz' element={<QuizPage />} />
           <Route path='/chat' element={<ChatListPage />} />
+          <Route path='/chat/:chatId' element={<ChatPage />} />
         </Routes>
         <NavBar />
       </BrowserRouter>

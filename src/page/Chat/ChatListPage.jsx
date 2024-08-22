@@ -1,4 +1,5 @@
 import { css } from '@emotion/css';
+import { useNavigate } from 'react-router-dom';
 import { FiPlusCircle } from "react-icons/fi";
 
 import Common from "@style/common"
@@ -68,6 +69,7 @@ const chatListItemComponentStyle = css`
 `;
 
 const ChatListItemComponent = ({ chat }) => {
+  const navigate = useNavigate();
   const elapsedTime = (date) => {
     const start = new Date(date);
     const end = new Date();
@@ -88,7 +90,7 @@ const ChatListItemComponent = ({ chat }) => {
   };
 
   return (
-    <div className={chatListItemComponentStyle} onClick={() => {}}>
+    <div className={chatListItemComponentStyle} onClick={() => {navigate(chat.id)}}>
       <div className="chat-intro">{chat.intro}</div>
       <div className="chat-time">{elapsedTime(chat.time)}</div>
     </div>
