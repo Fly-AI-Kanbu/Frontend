@@ -5,6 +5,7 @@ import Common from "@style/common"
 import { css } from '@emotion/css';
 
 const headerStyle = css`
+  -z-index: -100;
   opacity: 0;
   display: flex;
   justify-content: center;

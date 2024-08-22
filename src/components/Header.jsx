@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiAlignJustify, FiBell } from "react-icons/fi";
 import Logo from "@assets/Logo.png";
 
@@ -6,6 +7,7 @@ import Common from "@style/common"
 import { css } from '@emotion/css';
 
 const headerStyle = css`
+  z-index: 100;
   position: fixed;
   top: 0;
   left: 50%;
@@ -31,14 +33,9 @@ const headerStyle = css`
     align-items: center;
 
     margin-right: auto;
-    img {
-      /*width: 1em;*/
-      height: 1.8em;
-    }
+    font-size: 1.2em;
 
-    h1 {
-      font-size: 1.2em;
-    }
+    cursor: pointer;
   }
 
   svg {
@@ -47,12 +44,10 @@ const headerStyle = css`
 `
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <div className={headerStyle}>
-      <div className='logo'>
-        <img src={Logo} alt="" />
-        <h1>Kanbu</h1>
-      </div>
+      <div className='logo' onClick={()=>{navigate('/')}}>Kanbu</div>
       <FiBell />
       <FiAlignJustify />
     </div>
