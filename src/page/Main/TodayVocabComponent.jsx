@@ -56,6 +56,7 @@ export const TodayVocabComponent = () => {
     ['React', '리액트'],
     ['Component', '컴포넌트'],
     ['Suicide', '자살'],
+    ['Cherry Pick','감탄고토']
   ];
 
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -82,7 +83,7 @@ export const TodayVocabComponent = () => {
 
   return (
     <div className={todayVocabStyle}>
-      <h3 className='title'>오늘의 단어</h3>
+      <h3 className='title'>Today's Voca</h3>
       {/* Vocab Slide list */}
       <div className='vocab-slide'>
         <FiChevronLeft className='button' onClick={handlePreviousWord}/>

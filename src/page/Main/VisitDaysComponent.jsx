@@ -76,23 +76,14 @@ const dayStyle = css`
   }
 `;
 
-//const checkInData = [
-//  { day: 'Mon', checkedIn: true },
-//  { day: 'Tue', checkedIn: true },
-//  { day: 'Wed', checkedIn: true },
-//  { day: 'Thu', checkedIn: false },
-//  { day: 'Fri', checkedIn: false },
-//  { day: 'Sat', checkedIn: false },
-//  { day: 'Sun', checkedIn: false },
-//];
 
 const checkInData = [
   { day: '일', checkedIn: true },
   { day: '월', checkedIn: true },
   { day: '화', checkedIn: true },
   { day: '수', checkedIn: true },
-  { day: '목', checkedIn: false },
-  { day: '금', checkedIn: false },
+  { day: '목', checkedIn: true },
+  { day: '금', checkedIn: true },
   { day: '토', checkedIn: false },
 ];
 
@@ -128,7 +119,7 @@ export const VisitDaysComponent = () => {
 
   return (
     <div className={visitDaysStyle}>
-      <h3 className='title'>주간 출석 현황</h3>
+      <h3 className='title'>attendance streak</h3>
       <div className='days'>
       {checkInData.map((data) => (
         <CheckInStatus key={data.day} day={data.day} checkedIn={data.checkedIn} />

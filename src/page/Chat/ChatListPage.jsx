@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import { useNavigate } from 'react-router-dom';
 import { FiPlusCircle } from "react-icons/fi";
-
+import { useState, useEffect } from 'react'; 
 import Common from "@style/common"
 import HeaderDummy from "@components/HeaderDummy";
 import NavBarDummy from '@components/NavBarDummy';
@@ -70,8 +70,8 @@ const chatListItemComponentStyle = css`
 
 const ChatListItemComponent = ({ chat }) => {
   const navigate = useNavigate();
-  const elapsedTime = (date) => {
-    const start = new Date(date);
+  const elapsedTime = (dateString) => {
+    const start = new Date(dateString);  // 날짜 형식 변환
     const end = new Date();
 
     const seconds = Math.floor((end.getTime() - start.getTime()) / 1000);
@@ -90,75 +90,43 @@ const ChatListItemComponent = ({ chat }) => {
   };
 
   return (
-    <div className={chatListItemComponentStyle} onClick={() => {navigate(chat.id)}}>
-      <div className="chat-intro">{chat.intro}</div>
-      <div className="chat-time">{elapsedTime(chat.time)}</div>
+    <div className={chatListItemComponentStyle} onClick={() => {navigate(chat.chat_id)}}>
+      <div className="chat-intro">{chat.subject_name}</div>
+      <div className="chat-time">{elapsedTime(chat.chat_time)}</div>
     </div>
   );
 }
-
 export const ChatListPage = () => {
-  const ChatList = [
-    {
-      intro: '안녕하세요? 오늘은 좋아하는 음식에 대해 말해보기로 해요.',
-      time: new Date("2024-08-20T10:00:00"),
-      id: '1',
-    },
-    {
-      intro: '오늘의 주제는 가장 좋아하는 색깔이에요.',
-      time: new Date("2024-08-19T10:00:00"),
-      id: '2',
-    },
-    {
-      intro: '오늘은 가장 좋아하는 동물에 대해 이야기해보는 시간을 가져볼까요?',
-      time: new Date("2024-08-18T10:00:00"),
-      id: '3',
-    },
-    {
-      intro: '안녕하세요? 오늘은 가장 좋아하는 계절에 대해 이야기해보는 시간을 가져볼까요?',
-      time: new Date("2024-08-17T10:00:00"),
-      id: '4',
-    },
-    {
-      intro: '좋은 아침이에요. 오늘은 가장 좋아하는 계절에 대해 이야기해보는 시간을 가져볼까요?',
-      time: new Date("2024-08-17T10:00:00"),
-      id: '5',
-    },
+  const [chatList, setChatList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    {
-      intro: '안녕하세요? 오늘은 좋아하는 음식에 대해 말해보기로 해요.',
-      time: new Date("2024-08-20T10:00:00"),
-      id: '6',
-    },
-    {
-      intro: '오늘의 주제는 가장 좋아하는 색깔이에요.',
-      time: new Date("2024-08-19T10:00:00"),
-      id: '7',
-    },
-    {
-      intro: '오늘은 가장 좋아하는 동물에 대해 이야기해보는 시간을 가져볼까요?',
-      time: new Date("2024-08-18T10:00:00"),
-      id: '8',
-    },
-    {
-      intro: '안녕하세요? 오늘은 가장 좋아하는 계절에 대해 이야기해보는 시간을 가져볼까요?',
-      time: new Date("2024-08-17T10:00:00"),
-      id: '9',
-    },
-    {
-      intro: '좋은 아침이에요. 오늘은 가장 좋아하는 계절에 대해 이야기해보는 시간을 가져볼까요?',
-      time: new Date("2024-08-17T10:00:00"),
-      id: '10',
-    },
+  useEffect(() => {
+    const fetchChatList = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/user/1/get-chat-list');
+        const data = await response.json();
+        setChatList(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching chat list:", error);
+        setLoading(false);
+      }
+    };
 
-  ];
+    fetchChatList();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={chatListPageStyle}>
       <HeaderDummy />
       <div className='new-chat'>
         새로운 채팅을 시작해 보세요&nbsp;<FiPlusCircle />
       </div>
-      {ChatList.map((chat, index) => (
+      {chatList.map((chat, index) => (
         <ChatListItemComponent key={index} chat={chat} />
       ))}
       <NavBarDummy />
