@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiMessageSquare, FiBarChart2, FiHome, FiUser, FiCheckSquare } from "react-icons/fi";
+import { FiMessageSquare, FiBarChart2, FiHome, FiUser, FiCheckSquare, FiPhoneCall } from "react-icons/fi";
 
 import Common from "@style/common"
 import { css } from '@emotion/css';
@@ -53,6 +53,11 @@ const NavBarItemList = [
     icon: FiMessageSquare,
     children: 'chat',
     to: '/chat',
+  },
+  {
+    icon: FiPhoneCall,
+    children: 'call',
+    to: '/call',
   },
   {
     icon: FiBarChart2,
