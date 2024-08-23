@@ -37,7 +37,7 @@ const statDescriptionItemStyle = css`
     margin-right: .5em;
   }
   .stat-description {
-    font-size: .9em;
+    font-size: .7em;
     font-weight: 700;
     color: rgba(${Common.colors.text}, 0.7);
   }
@@ -55,24 +55,28 @@ const StatDescriptionItemComponent = ({ stat }) => {
 export const StatDescriptionComponent = () => {
   const StatDescription = [
     {
-      type: '어휘력',
-      description: '단어를 이해하고 사용하는 능력'
+      type: '복잡성',
+      description: 'grammatical structure and lexical diversity' 
+    },
+    {
+      type: '적절성',
+      description: 'providing correct answers to questions' 
+    },
+    {
+      type: '건전성',
+      description: 'using non-discriminatory and non-offensive language' 
     },
     {
       type: '정확성',
-      description: '문법적인 오류 없이 말하고 쓰는 능력'
-    },
-    {
-      type: '유사성',
-      description: '단어와 문장을 비교하고 구분하는 능력'
+      description: 'sentence proficiency compared to that of a native speaker'
     },
     {
       type: '유창성',
-      description: '말하는 속도와 유창함'
+      description: 'Linguistic proficiency in sentence composition' 
     },
     {
-      type: '이해력',
-      description: '듣거나 읽은 것을 이해하는 능력'
+      type: '어휘력',
+      description: 'The ability to comprehend and use vocabulary'
     }
   ]
 

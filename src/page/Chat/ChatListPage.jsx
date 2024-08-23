@@ -2,7 +2,7 @@ import { css } from '@emotion/css';
 import { useNavigate } from 'react-router-dom';
 import { FiPlusCircle } from "react-icons/fi";
 import { useState, useEffect } from 'react'; 
-import Common from "@style/common"
+import Common from "@style/common";
 import HeaderDummy from "@components/HeaderDummy";
 import NavBarDummy from '@components/NavBarDummy';
 
@@ -90,22 +90,56 @@ const ChatListItemComponent = ({ chat }) => {
   };
 
   return (
-    <div className={chatListItemComponentStyle} onClick={() => {navigate(chat.chat_id)}}>
+    <div className={chatListItemComponentStyle} onClick={() => navigate(`/chat/${chat.chat_id}`, { 
+      state: { chat_id: chat.chat_id } })}>
       <div className="chat-intro">{chat.subject_name}</div>
       <div className="chat-time">{elapsedTime(chat.chat_time)}</div>
     </div>
   );
 }
+
 export const ChatListPage = () => {
   const [chatList, setChatList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const handleCreateChat = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/user/1/create-chat', {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create chat");
+      }
+
+      const data = await response.json();
+      const newChatId = data.chat_id;
+      const firstMessage = data.first_message;
+      const subjectName = data.subject_name;
+
+      navigate(`/chat/${newChatId}`, { 
+        state: { 
+          chat_id: newChatId, 
+          firstMessage: firstMessage,
+          subjectName 
+        } 
+      });
+    } catch (error) {
+      console.error("Error creating chat:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchChatList = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/user/1/get-chat-list');
         const data = await response.json();
-        setChatList(data);
+
+        // 데이터를 역순으로 정렬합니다.
+        const sortedChatList = data.sort((a, b) => new Date(b.chat_time) - new Date(a.chat_time));
+
+        setChatList(sortedChatList);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching chat list:", error);
@@ -116,14 +150,10 @@ export const ChatListPage = () => {
     fetchChatList();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className={chatListPageStyle}>
       <HeaderDummy />
-      <div className='new-chat'>
+      <div className='new-chat' onClick={handleCreateChat}>
         새로운 채팅을 시작해 보세요&nbsp;<FiPlusCircle />
       </div>
       {chatList.map((chat, index) => (

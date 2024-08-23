@@ -1,26 +1,10 @@
-import { useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
 import { css } from '@emotion/css';
 import { Radar } from 'react-chartjs-2';
-import { Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  RadialLinearScale,
-  scales
-} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, RadialLinearScale } from 'chart.js';
+import Common from "@style/common";
 
-import Common from "@style/common"
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  RadialLinearScale,
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, RadialLinearScale);
 
 const statChartComponentStyle = css`
   display: flex;
@@ -31,7 +15,6 @@ const statChartComponentStyle = css`
 
   width: 90%;
   padding: 1em;
-  /*border-bottom: 1px solid rgba(${Common.colors.border});*/
   background-color: rgba(${Common.colors.gray300}, 0.8);
   box-shadow: 4px 4px 12px rgba(${Common.colors.gray800}, 0.3);
 
@@ -69,22 +52,46 @@ const statChartComponentStyle = css`
 `;
 
 export const StatChartComponent = () => {
-  const UserStat = {
-    '어휘력': 90,
-    '정확성': 70,
-    '유사성': 65,
-    '유창성': 30,
-    '이해력': 35,
-    '발기력': 100
-  }
-  const AvgStat = {
-    '어휘력': 50,
-    '정확성': 50,
-    '유사성': 50,
-    '유창성': 50,
-    '이해력': 50,
-    '발기력': 20,
-  }
+  const [userStat, setUserStat] = useState({
+    복잡성: 0,
+    건전성: 0,
+    유창성: 0,
+    어휘력: 0,
+    정확성: 0,
+    적절성: 0,
+  });
+
+  const [avgStat, setAvgStat] = useState({
+    복잡성: 30,
+    건전성: 70,
+    유창성: 65,
+    어휘력: 30,
+    정확성: 59,
+    적절성: 40,
+  });
+
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/user/1/koability');
+        const data = await response.json();
+        // 데이터를 UserStat 형식으로 변환
+        const formattedUserStat = {
+          복잡성: data.complexity,
+          건전성: data.toxicity,
+          유창성: data.fluency,
+          어휘력: data.vocabulary,
+          정확성: data.accuracy,
+          적절성: data.context_score,
+        };
+        setUserStat(formattedUserStat);
+      } catch (error) {
+        console.error("Error fetching user stats:", error);
+      }
+    };
+
+    fetchUserStats();
+  }, []);
 
   return (
     <div className={statChartComponentStyle}>
@@ -92,38 +99,39 @@ export const StatChartComponent = () => {
         <span className='my-stat'>내 성적</span>
         <span className='avg-stat'>평균 성적</span>
       </div>
-      <Radar data={{
-        labels: Object.keys(UserStat),
-        datasets: [
-          {
-            label: 'User Stat',
-            data: Object.values(UserStat),
-            fill: true,
-            backgroundColor: `rgba(${Common.colors.primary300}, 0.5)`,
-            borderColor: `rgb(${Common.colors.primary300})`,
-            pointBackgroundColor: `rgb(${Common.colors.primary300})`,
+      <Radar
+        data={{
+          labels: Object.keys(userStat),
+          datasets: [
+            {
+              label: 'User Stat',
+              data: Object.values(userStat),
+              fill: true,
+              backgroundColor: `rgba(${Common.colors.primary300}, 0.5)`,
+              borderColor: `rgb(${Common.colors.primary300})`,
+              pointBackgroundColor: `rgb(${Common.colors.primary300})`,
+            },
+            {
+              label: 'Avg Stat',
+              data: Object.values(avgStat),
+              fill: true,
+              backgroundColor: `rgba(${Common.colors.gray500}, 0.5)`,
+              borderColor: `rgb(${Common.colors.gray500})`,
+              pointBackgroundColor: `rgb(${Common.colors.gray500})`,
+            },
+          ],
+        }}
+        options={{
+          scales: {
+            r: {
+              min: 0,
+              max: 100,
+              ticks: {
+                display: false,
+              },
+            },
           },
-          {
-            label: 'Avg Stat',
-            data: Object.values(AvgStat),
-            fill: true,
-            backgroundColor: `rgba(${Common.colors.gray500}, 0.5)`,
-            borderColor: `rgb(${Common.colors.gray500})`,
-            pointBackgroundColor: `rgb(${Common.colors.gray500})`,
-          }
-        ],
-      }} options={{
-        scales: {
-          r: {
-            min: 0,
-            max: 100,
-            ticks: {
-              display: false,
-            }
-          },
-
-        }
-      }}
+        }}
       />
     </div>
   );
