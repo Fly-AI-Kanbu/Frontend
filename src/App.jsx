@@ -9,6 +9,7 @@ import { ProfilePage } from "./page/Profile/ProfilePage";
 import { StatPage } from "./page/Stat/StatPage";
 import { QuizPage } from "./page/Quiz/QuizPage";
 import { CallPage } from "./page/Call/CallPage";
+import { ReadPage } from "./page/Read/ReadPage";
 import { ChatListPage } from "./page/Chat/ChatListPage";
 import { ChatPage } from "./page/Chat/ChatPage";
 
@@ -30,6 +31,7 @@ export const App = () => {
           <Route path='/stat' element={<StatPage />} />
           <Route path='/quiz' element={<QuizPage />} />
           <Route path='/call' element={<CallPage />} />
+          <Route path='/read' element={<ReadPage />} />
           <Route path='/chat' element={<ChatListPage />} />
           <Route path='/chat/:chatId' element={<ChatPage />} />
         </Routes>
