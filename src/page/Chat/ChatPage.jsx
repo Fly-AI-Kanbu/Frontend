@@ -1,6 +1,7 @@
 import { css } from '@emotion/css';
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';  // useLocation과 useParams 훅 사용
+import { useBeforeunload } from 'react-beforeunload';
 import { FiSend } from 'react-icons/fi';
 import Common from "@style/common";
 import HeaderDummy from "@components/HeaderDummy";
@@ -119,48 +120,65 @@ export const ChatPage = () => {
   const [chatLog, setChatLog] = useState([]);
   const [input, setInput] = useState('');
 
+  const finishChat = async () => {
+    try {
+      await fetch(`http://127.0.0.1:8000/chat/${chat_id}/finish-chat`, {
+        method: 'PUT',
+      });
+      console.log('Chat finished');
+    } catch (error) {
+      console.error('Error finishing chat:', error);
+    }
+  };
+
+  useBeforeunload(() => {
+    console.log("Before unload - finishing chat...");
+    finishChat();
+  });
+
+
   useEffect(() => {
     if (state?.firstMessage) {
       const firstMessage = state.firstMessage;
-
-      // '답변:'과 '번역:'으로 분리
+    
+      // 답변, 발음, 번역을 분리
       const answerPart = firstMessage.match(/답변:\s*"([^"]*)"/);
       const pronunciationPart = firstMessage.match(/발음:\s*"([^"]*)"/);
       const translationPart = firstMessage.match(/번역:\s*"([^"]*)"/);
-  
-      // 해당 구문들이 존재하는지 확인하고 값을 가져옴
-      const answerp = answerPart ? answerPart[1] : '';
-      const pronunciationp = pronunciationPart ? pronunciationPart[1] : '';
-      const translationp = translationPart ? translationPart[1] : '';
-      setChatLog(prevLog => [
-        ...prevLog,
-        {
-          content: (
-            <>
-              {answerp}
-              <br />
-              <br />
-              {translationp}
-              <br />
-              <br />
-              {pronunciationp}
-            </>
-          ), // 두 줄로 표시
-          time: new Date().toISOString(),
-          isUser: false,
-        }
-      ]);
+    
+      const answer = answerPart ? answerPart[1] : firstMessage;
+      const pronunciation = pronunciationPart ? pronunciationPart[1] : '';
+      const translation = translationPart ? translationPart[1] : '';
+    
+      // 첫 메시지는 GPT의 응답이므로 isUser는 false로 설정
+      setChatLog([{
+        content: (
+          <>
+            {answer}
+            {translation && (
+              <>
+                <br /><br />{translation}
+              </>
+            )}
+            {pronunciation && (
+              <>
+                <br /><br />{pronunciation}
+              </>
+            )}
+          </>
+        ),
+        time: new Date().toISOString(),
+        isUser: false,  // GPT 메시지로 설정
+      }]);
     }
     else {
       const fetchChatLog = async () => {
         try {
           const response = await fetch(`http://127.0.0.1:8000/chat/${chat_id}/get_chat_log`);
           const data = await response.json();
-          
-          const sortedLog = data.sort((a, b) => new Date(b.created_time) - new Date(a.created_time));
     
           // 로그를 상태에 저장하면서 답변, 발음, 번역을 분리
-          const formattedLog = sortedLog.map(chat => {
+          const formattedLog = data.map(chat => {
             const answerMatch = chat.content.match(/답변:\s*"([^"]*)"/);
             const pronunciationMatch = chat.content.match(/발음:\s*"([^"]*)"/);
             const translationMatch = chat.content.match(/번역:\s*"([^"]*)"/);
@@ -202,15 +220,25 @@ export const ChatPage = () => {
     
       fetchChatLog();
     }
-    
+    return () => {
+      console.log("Component unmounted - finishing chat...");
+      finishChat();
+    };
   }, [chat_id, state]);
-  
+
+
   const handleSend = async () => {
     if (!chat_id) {
       console.error("chat_id is undefined");
       return;
     }
   
+    if (!input.trim()) {
+      console.error("Cannot send an empty message");
+      return;
+    }
+  
+    // Send user message to chat log locally
     const newChatLog = [...chatLog];
     newChatLog.push({
       content: input,
@@ -218,17 +246,21 @@ export const ChatPage = () => {
       isUser: true,
     });
     setChatLog(newChatLog);
-    setInput('');
+    setInput('');  // Clear the input field
   
     try {
+      // Debugging: Check the content being sent to the server
+      console.log("Sending message:", input);
+  
       const response = await fetch(`http://127.0.0.1:8000/chat/${chat_id}/send_chat_message`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: input }),
+        body: JSON.stringify({ content: input }),  // Send the message to the backend
       });
   
+      // Check if the response is OK
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
@@ -236,33 +268,40 @@ export const ChatPage = () => {
       const data = await response.json();
       const botReply = data.content;
   
-      // 정규식을 사용해 "답변:", "발음:", "번역:" 패턴 분리
+      // Extract and parse the bot's reply (answer, pronunciation, translation)
       const answerMatch = botReply.match(/답변:\s*"([^"]*)"/);
       const pronunciationMatch = botReply.match(/발음:\s*"([^"]*)"/);
       const translationMatch = botReply.match(/번역:\s*"([^"]*)"/);
   
-      // 해당 구문들이 존재하는지 확인하고 값을 가져옴
-      const answer = answerMatch ? answerMatch[1] : '';
+      const answer = answerMatch ? answerMatch[1] : botReply;
       const pronunciation = pronunciationMatch ? pronunciationMatch[1] : '';
       const translation = translationMatch ? translationMatch[1] : '';
   
-      // 두 줄로 구분된 텍스트로 변환
+      // Add bot's reply to chat log
       setChatLog(prevLog => [
         ...prevLog,
         {
           content: (
             <>
               {answer}
-              <br />
-              <br />
-              {translation}
-              <br />
-              <br />
-              {pronunciation}
+              {translation && (
+                <>
+                  <br />
+                  <br />
+                  {translation}
+                </>
+              )}
+              {pronunciation && (
+                <>
+                  <br />
+                  <br />
+                  {pronunciation}
+                </>
+              )}
             </>
-          ), // 두 줄로 표시
+          ),
           time: new Date().toISOString(),
-          isUser: false,
+          isUser: false,  // Set bot message
         }
       ]);
   
@@ -270,6 +309,7 @@ export const ChatPage = () => {
       console.error('Error sending message:', error);
     }
   };
+  
   
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {

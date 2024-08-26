@@ -1,19 +1,22 @@
 import { css } from '@emotion/css';
 
 import Common from "@style/common"
-
 const scriptComponentStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  padding: 1em;
 
-  flex-grow: 1;
-  width: 100%;
-  padding: 1em 0;
-  gap: .5em;
-  overflow: scroll;
+  .line {
+    margin-bottom: 1.5em; /* 각 구절 사이의 간격을 일정하게 설정 */
+  }
+
+  .korean, .english, .romanized {
+    display: block; /* 각 줄을 강제로 블록 요소로 만들어 줄바꿈 */
+    margin-bottom: 0.5em; /* 각 라인 간의 간격 설정 */
+    white-space: pre-wrap; /* 공백과 줄바꿈을 정확하게 유지 */
+  }
 `;
-
 const chatListItemComponentStyle = css`
   display: flex;
   flex-direction: row;
@@ -52,8 +55,24 @@ const ChatItemComponent = ({ content, isUser }) => {
   }
 
   return (
-    <div className={chatListItemComponentStyle} style={{flexDirection: isUser ? 'row-reverse' : ''}}>
-      <div className="chat-content" style={{backgroundColor: isUser ? `rgba(${Common.colors.primary100}, 0.3)` : ''}}>{content}</div>
+    <div 
+      className={chatListItemComponentStyle} 
+      style={{
+        flexDirection: isUser ? 'row-reverse' : '', 
+        alignItems: 'flex-start' // 텍스트가 여러 줄일 경우 상단 정렬을 유지
+      }}
+    >
+      <div 
+        className="chat-content" 
+        style={{
+          backgroundColor: isUser ? `rgba(${Common.colors.primary100}, 0.3)` : '', 
+          whiteSpace: 'pre-wrap', // 공백과 줄바꿈을 유지
+          display: 'block', // 각 콘텐츠가 블록 요소로 출력되도록 설정
+          wordBreak: 'break-word' // 긴 단어가 있을 경우 적절히 줄바꿈되도록 설정
+        }}
+      >
+        {content}
+      </div>
     </div>
   );
 }
@@ -62,7 +81,18 @@ export const ScriptComponent = ({ scriptList }) => {
   return (
     <div className={scriptComponentStyle}>
       {scriptList.map((script, index) => (
-        <ChatItemComponent key={index} content={script.scriptContent} isUser={script.isUser} />
+        <div key={index} className="line">
+          <ChatItemComponent 
+            content={
+              <>
+                <div className="korean">{script.korean}</div>
+                <div className="english">{script.english}</div>
+                <div className="romanized">{script.romanized}</div>
+              </>
+            } 
+            isUser={script.isUser} 
+          />
+        </div>
       ))}
     </div>
   );

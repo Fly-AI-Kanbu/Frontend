@@ -135,20 +135,23 @@ export const ChatListPage = () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/user/1/get-chat-list');
         const data = await response.json();
-
-        // 데이터를 역순으로 정렬합니다.
-        const sortedChatList = data.sort((a, b) => new Date(b.chat_time) - new Date(a.chat_time));
-
-        setChatList(sortedChatList);
+  
+        // 백엔드에서 정렬된 데이터를 그대로 사용
+        setChatList(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching chat list:", error);
         setLoading(false);
       }
     };
-
+  
     fetchChatList();
   }, []);
+  
+  
+  
+  
+  
 
   return (
     <div className={chatListPageStyle}>

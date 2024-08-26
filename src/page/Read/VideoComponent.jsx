@@ -13,12 +13,12 @@ const videoComponentStyle = css`
   }
 `;
 
-export const VideoComponent = ({ videoList, index }) => {
+export const VideoComponent = ({videoUrl}) => {
   //const [index, setIndex] = useState(0);
   return (
     <div className={videoComponentStyle}>
       <video
-        src={videoList[index].videoUrl}
+        src={videoUrl}
         playsInline
         controls
       />

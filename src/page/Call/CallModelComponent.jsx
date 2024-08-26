@@ -57,6 +57,8 @@ export const CallModelComponent = () => {
   return (
     <div className={callModelComponentStyle}>
       <img src="https://cdn.prod.website-files.com/657639ebfb91510f45654149/6642741e323daf4ab36b0877_Frame%2048095503.png" alt="" />
+      {/*<img src="https://sungyesa.com/new/data/file/secret/988486029_Pxj6X8Yl_IMG_8052.jpeg" alt="" />*/}
+      
       <div className='time-count'>{String(Math.floor(timeCount / 60)).padStart(2, '0')}:{String(timeCount % 60).padStart(2, '0')}</div>
       <div className='description'>AI 모델과 대화해보세요</div>
     </div>
