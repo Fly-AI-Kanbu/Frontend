@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiMessageSquare, FiBarChart2, FiVideo, FiUser, FiCheckSquare, FiPhoneCall } from "react-icons/fi";
+import { FiMusic, FiMessageSquare, FiBarChart2, FiVideo, FiUser, FiCheckSquare, FiPhoneCall } from "react-icons/fi";
 
 import Common from "@style/common"
 import { css } from '@emotion/css';
@@ -60,7 +60,7 @@ const NavBarItemList = [
     to: '/call',
   },
   {
-    icon: FiVideo,
+    icon: FiMusic,
     children: 'read',
     to: '/read',
   },

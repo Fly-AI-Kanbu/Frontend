@@ -50,12 +50,12 @@ const todayVocabStyle = css`
 
 export const TodayVocabComponent = () => {
   const todayVocab = [
-    ['GitHub', '깃허브'],
-    ['Copilot', '코파일럿'],
-    ['JavaScript', '자바스크립트'],
-    ['React', '리액트'],
-    ['Component', '컴포넌트'],
-    ['Suicide', '자살'],
+    ['an empty dream', '일장춘몽'],
+    ['great anxiety', '노심초사'],
+    ['root out', '발본색원'],
+    ['the irony of fate', '새옹지마'],
+    ['self-praise', '자화자찬'],
+    ['look forward to', '학수고대'],
     ['Cherry Pick','감탄고토']
   ];
 
@@ -83,7 +83,7 @@ export const TodayVocabComponent = () => {
 
   return (
     <div className={todayVocabStyle}>
-      <h3 className='title'>Today's Voca</h3>
+      <h3 className='title'>Today's idioms</h3>
       {/* Vocab Slide list */}
       <div className='vocab-slide'>
         <FiChevronLeft className='button' onClick={handlePreviousWord}/>

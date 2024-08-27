@@ -39,7 +39,6 @@ const getFeedbackStyle = (isCorrect) => css`
   z-index: 1000;
   padding: 1em;
   border-radius: 1em;
-  background-color: ${isCorrect ? 'rgba(144, 238, 144, 0.8)' : 'rgba(255, 99, 71, 0.8)'};
 
   .feedback-emoji {
     font-size: 5em;
@@ -137,7 +136,6 @@ export const QuizComponent = () => {
 
       if (result.is_correct) {
         setFeedback('✅');
-        setFeedbackText('맞았습니다!');
         setIsCorrect(true); // 맞으면 true
         setTimeout(() => {
           sliderRef.current.slickNext(); // 다음 퀴즈로 이동
@@ -147,7 +145,7 @@ export const QuizComponent = () => {
         }, 500);
       } else {
         setFeedback('😢');
-        setFeedbackText('틀렸습니다!');
+        
         setIsCorrect(false); // 틀리면 false
         setTimeout(() => {
           setFeedback(null);

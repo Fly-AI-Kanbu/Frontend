@@ -1,6 +1,7 @@
 import { css } from '@emotion/css';
-import { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';  // useLocation과 useParams 훅 사용
+import { useState, useEffect, useRef } from 'react';  // useRef 추가
+import { useLocation, useParams } from 'react-router-dom';  
+import { useBeforeunload } from 'react-beforeunload';
 import { FiSend } from 'react-icons/fi';
 import Common from "@style/common";
 import HeaderDummy from "@components/HeaderDummy";
@@ -15,14 +16,14 @@ const chatPageStyle = css`
   height: 100vh;
 
   .chat-log-list {
-    padding: 1em;;
+    padding: 1em;
     display: flex;
     flex-direction: column;
     gap: .5em;
     flex-grow: 1;
     min-height: 0;
 
-    overflow: scroll;
+    overflow-y: auto;  /* 스크롤 가능하게 변경 */
   }
 `;
 
@@ -37,8 +38,6 @@ const chatListItemComponentStyle = css`
   .chat-content {
     display: flex;
     width: fit-content;
-    /*width: max-content;*/
-
     flex-wrap: wrap;
     padding: .7em 1em;
     font-size: .9em;
@@ -118,49 +117,72 @@ export const ChatPage = () => {
 
   const [chatLog, setChatLog] = useState([]);
   const [input, setInput] = useState('');
+  
+  const chatLogRef = useRef(null);  // chat-log-list 요소에 대한 ref 추가
+
+  const finishChat = async () => {
+    try {
+      await fetch(`http://127.0.0.1:8000/chat/${chat_id}/finish-chat`, {
+        method: 'PUT',
+      });
+      console.log('Chat finished');
+    } catch (error) {
+      console.error('Error finishing chat:', error);
+    }
+  };
+
+  useBeforeunload(() => {
+    console.log("Before unload - finishing chat...");
+    finishChat();
+  });
+
+  // 메시지가 추가될 때마다 자동으로 아래로 스크롤하는 로직
+  useEffect(() => {
+    if (chatLogRef.current) {
+      chatLogRef.current.scrollTop = chatLogRef.current.scrollHeight;
+    }
+  }, [chatLog]);  // chatLog가 변경될 때마다 호출
+
 
   useEffect(() => {
     if (state?.firstMessage) {
       const firstMessage = state.firstMessage;
-
-      // '답변:'과 '번역:'으로 분리
+    
       const answerPart = firstMessage.match(/답변:\s*"([^"]*)"/);
       const pronunciationPart = firstMessage.match(/발음:\s*"([^"]*)"/);
       const translationPart = firstMessage.match(/번역:\s*"([^"]*)"/);
-  
-      // 해당 구문들이 존재하는지 확인하고 값을 가져옴
-      const answerp = answerPart ? answerPart[1] : '';
-      const pronunciationp = pronunciationPart ? pronunciationPart[1] : '';
-      const translationp = translationPart ? translationPart[1] : '';
-      setChatLog(prevLog => [
-        ...prevLog,
-        {
-          content: (
-            <>
-              {answerp}
-              <br />
-              <br />
-              {translationp}
-              <br />
-              <br />
-              {pronunciationp}
-            </>
-          ), // 두 줄로 표시
-          time: new Date().toISOString(),
-          isUser: false,
-        }
-      ]);
+    
+      const answer = answerPart ? answerPart[1] : firstMessage;
+      const pronunciation = pronunciationPart ? pronunciationPart[1] : '';
+      const translation = translationPart ? translationPart[1] : '';
+    
+      setChatLog([{
+        content: (
+          <>
+            {answer}
+            {translation && (
+              <>
+                <br /><br />{translation}
+              </>
+            )}
+            {pronunciation && (
+              <>
+                <br /><br />{pronunciation}
+              </>
+            )}
+          </>
+        ),
+        time: new Date().toISOString(),
+        isUser: false,
+      }]);
     }
     else {
       const fetchChatLog = async () => {
         try {
           const response = await fetch(`http://127.0.0.1:8000/chat/${chat_id}/get_chat_log`);
           const data = await response.json();
-          
-          const sortedLog = data.sort((a, b) => new Date(b.created_time) - new Date(a.created_time));
     
-          // 로그를 상태에 저장하면서 답변, 발음, 번역을 분리
-          const formattedLog = sortedLog.map(chat => {
+          const formattedLog = data.map(chat => {
             const answerMatch = chat.content.match(/답변:\s*"([^"]*)"/);
             const pronunciationMatch = chat.content.match(/발음:\s*"([^"]*)"/);
             const translationMatch = chat.content.match(/번역:\s*"([^"]*)"/);
@@ -190,7 +212,7 @@ export const ChatPage = () => {
                 </>
               ),
               time: chat.created_time,
-              isUser: chat.is_human // is_human이 true면 사용자 메시지로 처리
+              isUser: chat.is_human
             };
           });
     
@@ -202,12 +224,21 @@ export const ChatPage = () => {
     
       fetchChatLog();
     }
-    
+    return () => {
+      console.log("Component unmounted - finishing chat...");
+      finishChat();
+    };
   }, [chat_id, state]);
-  
+
+
   const handleSend = async () => {
     if (!chat_id) {
       console.error("chat_id is undefined");
+      return;
+    }
+  
+    if (!input.trim()) {
+      console.error("Cannot send an empty message");
       return;
     }
   
@@ -221,6 +252,8 @@ export const ChatPage = () => {
     setInput('');
   
     try {
+      console.log("Sending message:", input);
+  
       const response = await fetch(`http://127.0.0.1:8000/chat/${chat_id}/send_chat_message`, {
         method: 'POST',
         headers: {
@@ -236,31 +269,36 @@ export const ChatPage = () => {
       const data = await response.json();
       const botReply = data.content;
   
-      // 정규식을 사용해 "답변:", "발음:", "번역:" 패턴 분리
       const answerMatch = botReply.match(/답변:\s*"([^"]*)"/);
       const pronunciationMatch = botReply.match(/발음:\s*"([^"]*)"/);
       const translationMatch = botReply.match(/번역:\s*"([^"]*)"/);
   
-      // 해당 구문들이 존재하는지 확인하고 값을 가져옴
-      const answer = answerMatch ? answerMatch[1] : '';
+      const answer = answerMatch ? answerMatch[1] : botReply;
       const pronunciation = pronunciationMatch ? pronunciationMatch[1] : '';
       const translation = translationMatch ? translationMatch[1] : '';
   
-      // 두 줄로 구분된 텍스트로 변환
       setChatLog(prevLog => [
         ...prevLog,
         {
           content: (
             <>
               {answer}
-              <br />
-              <br />
-              {translation}
-              <br />
-              <br />
-              {pronunciation}
+              {translation && (
+                <>
+                  <br />
+                  <br />
+                  {translation}
+                </>
+              )}
+              {pronunciation && (
+                <>
+                  <br />
+                  <br />
+                  {pronunciation}
+                </>
+              )}
             </>
-          ), // 두 줄로 표시
+          ),
           time: new Date().toISOString(),
           isUser: false,
         }
@@ -271,6 +309,7 @@ export const ChatPage = () => {
     }
   };
   
+  
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleSend();
@@ -280,7 +319,7 @@ export const ChatPage = () => {
   return (
     <div className={chatPageStyle}>
       <HeaderDummy />
-      <div className='chat-log-list'>
+      <div className='chat-log-list' ref={chatLogRef}>  {/* chat-log-list에 ref 추가 */}
         {chatLog.map((chat, index) => (
           <ChatItemComponent key={index} content={chat.content} time={chat.time} isUser={chat.isUser} />
         ))}
@@ -294,5 +333,4 @@ export const ChatPage = () => {
       <NavBarDummy />
     </div>
   );
-
 };
